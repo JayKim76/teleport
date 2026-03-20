@@ -1,0 +1,15 @@
+# Environments
+venv/
+env/
+.env
+__pycache__/
+*.pyc
+
+# Logs and Data
+*.log
+ddl_output/
+teleport_ddl/
+
+# IDEs
+.idea/
+.vscode/
