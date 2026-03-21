@@ -1,0 +1,290 @@
+:root {
+    --bg-color: #0a0e14;
+    --surface-glass: rgba(32, 38, 47, 0.4);
+    --border-glass: rgba(114, 117, 125, 0.15);
+    --neon-cyan: #00FFFF;
+    --neon-cyan-dim: #00e6e6;
+    --neon-purple: #BF00FF;
+    --text-primary: #f1f3fc;
+    --text-secondary: #a8abb3;
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Glassmorphism utility */
+.glass {
+    background: var(--surface-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+}
+
+/* Typography styles */
+h1, h2, .value { font-family: var(--font-heading); }
+.neon-cyan { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0,255,255,0.4); }
+.neon-purple { color: var(--neon-purple); text-shadow: 0 0 10px rgba(191,0,255,0.4); }
+
+.layout {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 300px;
+    background: rgba(15, 20, 26, 0.8);
+    border-right: 1px solid var(--border-glass);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 3rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px rgba(0,255,255,0.3);
+}
+
+.pipeline { list-style: none; }
+.pipeline li {
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+}
+
+.pipeline li.active {
+    color: var(--text-primary);
+    background: rgba(0, 255, 255, 0.05);
+    border-left: 4px solid var(--neon-cyan);
+    box-shadow: inset 20px 0 40px -20px rgba(0, 255, 255, 0.15);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Metrics Row */
+.metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.card {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.card .label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.card .value { font-size: 2.5rem; font-weight: 700; }
+
+/* Dashboard Body */
+.dashboard-body {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1.5rem;
+    flex: 1;
+}
+
+.dashboard-body h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+}
+
+/* Circular Progress */
+.progress-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.circular-progress {
+    position: relative;
+    width: 250px;
+    height: 250px;
+}
+
+.circular-progress svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+
+.circular-progress circle {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+}
+
+.circular-progress .bg { stroke: rgba(255, 255, 255, 0.05); }
+
+.circular-progress .fg {
+    stroke: url(#cyan-gradient);
+    stroke: var(--neon-cyan);
+    stroke-dasharray: 283;
+    stroke-dashoffset: 283; /* 0% */
+    transition: stroke-dashoffset 1s ease-out;
+    filter: drop-shadow(0 0 8px rgba(0,255,255,0.6));
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.progress-text span {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px rgba(0,255,255,0.3);
+}
+.progress-text small {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+}
+
+/* Table */
+.table-section table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-section th {
+    text-align: left;
+    padding: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-glass);
+}
+
+.table-section td {
+    padding: 1.2rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.02);
+    font-size: 0.95rem;
+}
+
+/* Progress bar inside table */
+.bar-wrap {
+    width: 100%; height: 6px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.bar-fill {
+    height: 100%; background: var(--neon-purple);
+    box-shadow: 0 0 8px rgba(191,0,255,0.6);
+}
+
+/* Connection Setup Form Styles */
+.setup-section {
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 2.5rem;
+}
+
+.setup-section h2 {
+    color: var(--neon-cyan);
+    margin-bottom: 0.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.05em;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: rgba(15, 20, 26, 0.6);
+    border: 1px solid var(--border-glass);
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+}
+
+.btn-glow {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+}
+
+.btn-glow:hover {
+    background: var(--neon-cyan);
+    color: var(--bg-color);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+}
+
+.btn-glow:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: transparent;
+    color: var(--text-secondary);
+    border-color: var(--text-secondary);
+    box-shadow: none;
+}

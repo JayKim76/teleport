@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teleport Migration Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h1 class="logo">TELEPORT</h1>
+            <ul class="pipeline">
+                <li class="active border-glow">1. Connection Setup</li>
+                <li>2. Assessment & Discovery</li>
+                <li>3. Schema Replication</li>
+                <li>4. Migration Planning</li>
+                <li>5. Execution</li>
+                <li>6. Validation</li>
+                <li>7. Cutover & Fallback</li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Connection Setup View -->
+            <section id="connection-setup" class="setup-section card glass" style="max-width: 900px; width: 100%;">
+                <h2>1. Connection Setup</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Enter your Database credentials to begin the migration assessment.</p>
+                <form id="setup-form">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                        <!-- Source DB -->
+                        <div>
+                            <h3 style="color: var(--neon-cyan); margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 1px solid var(--border-glass); padding-bottom: 0.5rem;">Source: Oracle DB</h3>
+                            <div class="form-group">
+                                <label for="host">Host</label>
+                                <input type="text" id="host" required placeholder="e.g. 192.168.1.100">
+                            </div>
+                            <div class="form-group">
+                                <label for="port">Port</label>
+                                <input type="number" id="port" required placeholder="1521" value="1521">
+                            </div>
+                            <div class="form-group">
+                                <label for="service">Service Name / SID</label>
+                                <input type="text" id="service" required placeholder="ORCL">
+                            </div>
+                            <div class="form-group">
+                                <label for="user">Username</label>
+                                <input type="text" id="user" required placeholder="system">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" required placeholder="••••••••">
+                            </div>
+                        </div>
+
+                        <!-- Target DB -->
+                        <div>
+                            <h3 style="color: var(--neon-purple); margin-bottom: 1rem; font-size: 1.1rem; border-bottom: 1px solid var(--border-glass); padding-bottom: 0.5rem;">Target: Oracle DB</h3>
+                            <div class="form-group">
+                                <label for="target-host">Host</label>
+                                <input type="text" id="target-host" required placeholder="e.g. 192.168.1.101">
+                            </div>
+                            <div class="form-group">
+                                <label for="target-port">Port</label>
+                                <input type="number" id="target-port" required placeholder="1521" value="1521">
+                            </div>
+                            <div class="form-group">
+                                <label for="target-service">Service Name / SID</label>
+                                <input type="text" id="target-service" required placeholder="ORCL">
+                            </div>
+                            <div class="form-group">
+                                <label for="target-user">Username</label>
+                                <input type="text" id="target-user" required placeholder="system">
+                            </div>
+                            <div class="form-group">
+                                <label for="target-password">Password</label>
+                                <input type="password" id="target-password" required placeholder="••••••••">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-glow" style="width: 100%;">Connect to Databases</button>
+                </form>
+            </section>
+
+            <!-- Assessment & Discovery View (Hidden initially) -->
+            <section id="assessment-view" class="setup-section card glass" style="display: none; max-width: 800px;">
+                <h2>2. Assessment & Discovery</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Analyzing source schema and estimating migration compatibility...</p>
+                
+                <div class="metrics" style="margin-bottom: 2rem;">
+                    <div class="card glass">
+                        <div class="label">Total Objects</div>
+                        <div class="value neon-cyan">1,842</div>
+                    </div>
+                    <div class="card glass">
+                        <div class="label">Estimated Size</div>
+                        <div class="value neon-purple">42.5 GB</div>
+                    </div>
+                    <div class="card glass">
+                        <div class="label">Compatibility</div>
+                        <div class="value" style="color: #00ffcc;">98.5%</div>
+                    </div>
+                </div>
+
+                <div class="table-section glass" style="margin-bottom: 2rem; border-radius: 8px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid var(--border-glass);">
+                            <td style="padding: 1rem;"><strong>Tables</strong></td>
+                            <td style="text-align: right; padding: 1rem; color: var(--neon-cyan);">1,240</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-glass);">
+                            <td style="padding: 1rem;"><strong>Views</strong></td>
+                            <td style="text-align: right; padding: 1rem; color: var(--neon-cyan);">350</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-glass);">
+                            <td style="padding: 1rem;"><strong>Functions & Procedures</strong></td>
+                            <td style="text-align: right; padding: 1rem; color: var(--neon-cyan);">210</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 1rem;"><strong>Triggers</strong></td>
+                            <td style="text-align: right; padding: 1rem; color: var(--neon-cyan);">42</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <button id="btn-start-replication" class="btn-glow">Start Schema Replication</button>
+            </section>
+
+            <!-- Schema Replication View (Hidden initially) -->
+            <section id="schema-view" class="setup-section card glass" style="display: none; max-width: 800px; width: 100%;">
+                <h2>3. Schema Replication</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Converting Oracle DDL to Target dialect and applying schema...</p>
+                
+                <div class="terminal-box" style="background: #05080f; border: 1px solid var(--border-glass); border-radius: 6px; padding: 1rem; font-family: monospace; height: 250px; overflow-y: auto; margin-bottom: 2rem; color: #a8abb3; font-size: 0.85rem; line-height: 1.5;">
+                    <ul id="schema-logs" style="list-style: none; margin: 0; padding: 0;">
+                        <!-- Logs injected by JS -->
+                    </ul>
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
+                        <span>Replication Progress</span>
+                        <span id="schema-progress-text" class="neon-cyan">0%</span>
+                    </div>
+                    <div class="bar-wrap" style="height: 8px;">
+                        <div id="schema-progress-bar" class="bar-fill" style="width: 0%; transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+
+                <button id="btn-proceed-planning" class="btn-glow" disabled>Proceed to Migration Planning</button>
+            </section>
+
+            <!-- Migration Planning View (Hidden initially) -->
+            <section id="planning-view" class="setup-section card glass" style="display: none; max-width: 800px; width: 100%;">
+                <h2>4. Migration Planning</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Configuring data pump parameters and parallelization strategy.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="card glass">
+                        <div class="label">Parallel Workers</div>
+                        <div class="value neon-cyan" style="font-size: 1.8rem;">8 Threads</div>
+                    </div>
+                    <div class="card glass">
+                        <div class="label">Chunk Size</div>
+                        <div class="value neon-purple" style="font-size: 1.8rem;">50,000 Rows</div>
+                    </div>
+                    <div class="card glass">
+                        <div class="label">Estimated Time</div>
+                        <div class="value" style="color: #00ffcc; font-size: 1.8rem;">~45 mins</div>
+                    </div>
+                    <div class="card glass">
+                        <div class="label">Data Volume</div>
+                        <div class="value text-primary" style="font-size: 1.8rem;">42.5 GB</div>
+                    </div>
+                </div>
+
+                <div class="table-section glass" style="margin-bottom: 2rem; padding: 1.5rem; text-align: left; border-radius: 8px;">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--neon-cyan); font-family: var(--font-heading); font-size: 1.1rem;">Strategy Settings</h3>
+                    <div class="form-group" style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.8rem; margin-bottom: 1rem;">
+                        <span style="color: var(--text-secondary); font-size: 0.95rem;">Fallback Strategy</span>
+                        <span style="color: var(--text-primary); font-weight: 500;">Log-based CDC Catchup (Enabled)</span>
+                    </div>
+                    <div class="form-group" style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.8rem; margin-bottom: 1rem;">
+                        <span style="color: var(--text-secondary); font-size: 0.95rem;">Index Creation</span>
+                        <span style="color: var(--text-primary); font-weight: 500;">Post-Data Load (Recommended)</span>
+                    </div>
+                    <div class="form-group" style="display: flex; justify-content: space-between;">
+                        <span style="color: var(--text-secondary); font-size: 0.95rem;">Data Integrity Check</span>
+                        <span style="color: var(--text-primary); font-weight: 500;">SHA-256 Checksum on core tables</span>
+                    </div>
+                </div>
+
+                <button id="btn-proceed-execution" class="btn-glow">Approve Plan & Proceed to Execution</button>
+            </section>
+
+            <!-- Dashboard View (Hidden initially) -->
+            <section id="dashboard-view" style="display: none; height: 100%; display: flex; flex-direction: column; gap: 2rem;">
+                <!-- Top Metrics -->
+                <section class="metrics">
+                    <div class="card glass">
+                        <div class="label">Total Tables</div>
+                        <div class="value" id="val-total">---</div>
+                    </div>
+                    <div class="card glass">
+                        <div class="label">Transfer Rate</div>
+                        <div class="value neon-cyan" id="val-rate">---</div>
+                    </div>
+                    <div class="card glass">
+                        <div class="label">Elapsed Time</div>
+                        <div class="value neon-purple" id="val-time">---</div>
+                    </div>
+                </section>
+
+                <!-- Dashboard Body -->
+                <section class="dashboard-body">
+                    <!-- Circular Progress -->
+                    <div class="progress-section card glass">
+                        <h2>Migration Progress</h2>
+                        <div class="circular-progress">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="bg" cx="50" cy="50" r="45"></circle>
+                                <circle class="fg" cx="50" cy="50" r="45" id="progress-circle"></circle>
+                            </svg>
+                            <div class="progress-text">
+                                <span id="val-progress">0%</span>
+                                <small>Complete</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Syncing Table -->
+                    <div class="table-section card glass">
+                        <h2>Real-time Syncing Status</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Table Name</th>
+                                    <th>Status</th>
+                                    <th>Rows Migrated</th>
+                                    <th>Speed</th>
+                                    <th>Progress</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                <!-- Rows injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                
+                <button id="btn-proceed-validation" class="btn-glow" style="display: none; margin-top: 1rem;">Validation Complete: Proceed to Step 6</button>
+            </section>
+
+            <!-- Validation View (Hidden initially) -->
+            <section id="validation-view" class="setup-section card glass" style="display: none; max-width: 800px; width: 100%;">
+                <h2>6. Validation & Testing</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Performing post-migration data integrity checks and schema validation.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="card glass" style="text-align: center;">
+                        <div class="label">Row Count Match</div>
+                        <div class="value neon-cyan" style="font-size: 1.5rem;" id="val-row-match">Pending</div>
+                    </div>
+                    <div class="card glass" style="text-align: center;">
+                        <div class="label">Data Checksums</div>
+                        <div class="value neon-cyan" style="font-size: 1.5rem;" id="val-checksum">Pending</div>
+                    </div>
+                    <div class="card glass" style="text-align: center;">
+                        <div class="label">Invalid Objects</div>
+                        <div class="value neon-purple" style="font-size: 1.5rem;" id="val-invalid">Pending</div>
+                    </div>
+                </div>
+
+                <div class="table-section glass" style="margin-bottom: 2rem; padding: 1.5rem; text-align: left; border-radius: 8px;">
+                    <h3 style="margin-bottom: 1.5rem; color: var(--neon-cyan); font-family: var(--font-heading); font-size: 1.1rem;">Validation Details</h3>
+                    <ul id="validation-logs" style="list-style: none; margin: 0; padding: 0; font-family: monospace; font-size: 0.9rem; color: var(--text-secondary); line-height: 1.8; min-height: 150px;">
+                        <!-- Logs injected by JS -->
+                    </ul>
+                </div>
+
+                <button id="btn-proceed-cutover" class="btn-glow" disabled>Approve Validation & Proceed to Cutover</button>
+            </section>
+
+            <!-- Cutover & Fallback View (Hidden initially) -->
+            <section id="cutover-view" class="setup-section card glass" style="display: none; max-width: 800px; width: 100%;">
+                <h2>7. Cutover & Fallback</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 2rem;">Finalizing the migration process. Please select an action to proceed.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="card glass" style="text-align: center; cursor: pointer; border: 1px solid var(--neon-cyan); transition: all 0.3s;" id="opt-cutover" onmouseover="this.style.boxShadow='0 0 15px rgba(0, 255, 204, 0.4)'" onmouseout="this.style.boxShadow='none'">
+                        <h3 style="color: var(--neon-cyan); margin-bottom: 1rem;">Execute Cutover</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Switch application routing to target database.<br>Source database will become read-only.</p>
+                    </div>
+                    <div class="card glass" style="text-align: center; cursor: pointer; border: 1px solid var(--neon-purple); transition: all 0.3s;" id="opt-fallback" onmouseover="this.style.boxShadow='0 0 15px rgba(188, 19, 254, 0.4)'" onmouseout="this.style.boxShadow='none'">
+                        <h3 style="color: var(--neon-purple); margin-bottom: 1rem;">Initiate Fallback</h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem;">Abort migration and revert to source database.<br>No data will be lost.</p>
+                    </div>
+                </div>
+
+                <div id="final-status" class="glass" style="display: none; padding: 2rem; text-align: center; border-radius: 8px;">
+                    <h2 id="final-message" style="margin-bottom: 1rem;"></h2>
+                    <p style="color: var(--text-secondary);">You may now close this dashboard.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
