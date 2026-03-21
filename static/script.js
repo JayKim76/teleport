@@ -12,16 +12,51 @@ document.addEventListener("DOMContentLoaded", () => {
             e.preventDefault();
             
             const btn = setupForm.querySelector('button');
-            btn.innerText = "Connecting...";
+            const originalText = btn.innerText;
+            btn.innerText = "Connecting & Verifying...";
             btn.disabled = true;
 
-            setTimeout(() => {
-                document.getElementById('connection-setup').style.display = 'none';
-                document.getElementById('assessment-view').style.display = 'block';
+            const payload = {
+                sourceHost: document.getElementById('host').value,
+                sourcePort: parseInt(document.getElementById('port').value, 10),
+                sourceService: document.getElementById('service').value,
+                sourceUser: document.getElementById('user').value,
+                sourcePass: document.getElementById('password').value,
+                targetHost: document.getElementById('target-host').value,
+                targetPort: parseInt(document.getElementById('target-port').value, 10),
+                targetService: document.getElementById('target-service').value,
+                targetUser: document.getElementById('target-user').value,
+                targetPass: document.getElementById('target-password').value
+            };
+
+            try {
+                const res = await fetch('/api/connect', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
                 
-                document.querySelector('.pipeline li:nth-child(1)').classList.remove('active', 'border-glow');
-                document.querySelector('.pipeline li:nth-child(2)').classList.add('active', 'border-glow');
-            }, 800);
+                const data = await res.json();
+                
+                if (data.status === 'success') {
+                    // Success: move to Step 2
+                    document.getElementById('connection-setup').style.display = 'none';
+                    document.getElementById('assessment-view').style.display = 'block';
+                    
+                    document.querySelector('.pipeline li:nth-child(1)').classList.remove('active', 'border-glow');
+                    document.querySelector('.pipeline li:nth-child(2)').classList.add('active', 'border-glow');
+                } else {
+                    // Error returned from backend
+                    alert(data.message || "Connection failed.");
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                console.error("Connection error:", err);
+                alert("Network error. Could not connect to the backend.");
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
         });
     }
 

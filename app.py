@@ -4,8 +4,11 @@ import threading
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
+from pydantic import BaseModel
 import uvicorn
 import time
+
+from src.db_connector import DBConnector
 
 app = FastAPI()
 
@@ -13,6 +16,50 @@ app = FastAPI()
 os.makedirs("static", exist_ok=True)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+class ConnectRequest(BaseModel):
+    sourceHost: str
+    sourcePort: int
+    sourceService: str
+    sourceUser: str
+    sourcePass: str
+    targetHost: str
+    targetPort: int
+    targetService: str
+    targetUser: str
+    targetPass: str
+
+@app.post("/api/connect")
+async def connect_dbs(req: ConnectRequest):
+    # Test Source DB
+    source_config = {
+        'host': req.sourceHost,
+        'port': req.sourcePort,
+        'service_name': req.sourceService,
+        'user': req.sourceUser,
+        'password': req.sourcePass
+    }
+    source_db = DBConnector(source_config)
+    
+    # Test Target DB
+    target_config = {
+        'host': req.targetHost,
+        'port': req.targetPort,
+        'service_name': req.targetService,
+        'user': req.targetUser,
+        'password': req.targetPass
+    }
+    target_db = DBConnector(target_config)
+    
+    source_ok = source_db.test_connection(db_type="oracle")
+    if not source_ok:
+        return {"status": "error", "message": "Failed to connect to Source Database."}
+        
+    target_ok = target_db.test_connection(db_type="oracle")
+    if not target_ok:
+        return {"status": "error", "message": "Failed to connect to Target Database."}
+        
+    return {"status": "success", "message": "Both Source and Target DBs connected successfully."}
 
 @app.get("/", response_class=HTMLResponse)
 async def get_index():
