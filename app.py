@@ -29,6 +29,30 @@ class ConnectRequest(BaseModel):
     targetUser: str
     targetPass: str
 
+class TestConnectRequest(BaseModel):
+    dbType: str
+    host: str
+    port: int
+    service: str
+    user: str
+    password: str
+
+@app.post("/api/test_connect")
+async def test_connect(req: TestConnectRequest):
+    config = {
+        'host': req.host,
+        'port': req.port,
+        'service_name': req.service,
+        'user': req.user,
+        'password': req.password
+    }
+    db = DBConnector(config)
+    ok = db.test_connection(db_type="oracle")
+    if ok:
+        return {"status": "success", "message": f"Successfully connected to {req.dbType.capitalize()} DB."}
+    else:
+        return {"status": "error", "message": f"Failed to connect to {req.dbType.capitalize()} DB. Check your credentials and try again."}
+
 @app.post("/api/connect")
 async def connect_dbs(req: ConnectRequest):
     # Test Source DB

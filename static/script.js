@@ -60,8 +60,72 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Test Source DB Connection
+    const btnTestSource = document.getElementById('btn-test-source');
+    if (btnTestSource) {
+        btnTestSource.addEventListener('click', () => {
+            testConnection('source', btnTestSource);
+        });
+    }
+
+    // Test Target DB Connection
+    const btnTestTarget = document.getElementById('btn-test-target');
+    if (btnTestTarget) {
+        btnTestTarget.addEventListener('click', () => {
+            testConnection('target', btnTestTarget);
+        });
+    }
+
+    async function testConnection(type, btn) {
+        const originalText = btn.innerText;
+        btn.innerText = "Testing...";
+        btn.disabled = true;
+
+        let payload;
+        if (type === 'source') {
+            payload = {
+                dbType: 'source',
+                host: document.getElementById('host').value,
+                port: parseInt(document.getElementById('port').value, 10) || 1521,
+                service: document.getElementById('service').value,
+                user: document.getElementById('user').value,
+                password: document.getElementById('password').value
+            };
+        } else {
+            payload = {
+                dbType: 'target',
+                host: document.getElementById('target-host').value,
+                port: parseInt(document.getElementById('target-port').value, 10) || 1521,
+                service: document.getElementById('target-service').value,
+                user: document.getElementById('target-user').value,
+                password: document.getElementById('target-password').value
+            };
+        }
+
+        try {
+            const res = await fetch('/api/test_connect', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.status === 'success') {
+                alert(data.message || "Connection successful!");
+            } else {
+                alert(data.message || "Connection failed.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Network error during test.");
+        } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    }
+
     // Step 2 -> Step 3
     if (btnReplication) {
+
         btnReplication.addEventListener('click', () => {
             document.getElementById('assessment-view').style.display = 'none';
             document.getElementById('schema-view').style.display = 'block';
